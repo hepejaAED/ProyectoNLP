@@ -1,3 +1,33 @@
 # ProyectoNLP
 
-Juan Alcaráz Otón, Xueyao An, Fabián Calvo Castillo, Adrián Carrasco Alcalá, Javier Herrero Pérez y Clara Montalvá Barcenilla.
+
+Juan Alcaráz Otón, Xueyao An, Fabián Calvo Castillo, Adrián Carrasco Alcalá, Javier Herrero Pérez, Clara Montalvá Barcenilla y Mario Martinez Guillen
+
+
+## Estructura de Datos
+
+Los artículos extraídos se almacenan en formato JSON con la siguiente estructura:
+
+```json
+{
+  "Link": "string",
+  "Periódico": "string",
+  "Fecha": "string (YYYY-MM-DD)",
+  "Título": "string",
+  "Subtítulo": "string o null",
+  "Categoría": "string",
+  "Contenido": "string"
+}
+```
+
+### Descripción de campos:
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| Link | string | URL del artículo original |
+| Periódico | string | Nombre del medio de comunicación |
+| Fecha | string | Fecha de publicación (formato YYYY-MM-DD) |
+| Título | string | Título principal del artículo |
+| Subtítulo | string o null | Subtítulo o descripción breve |
+| Categoría | string | Categoría o sección del artículo |
+| Contenido | string | Texto completo del artículo |
