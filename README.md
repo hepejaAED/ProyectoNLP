@@ -10,7 +10,7 @@ Este proyecto cubre los siguientes periódicos y medios:
 
 - **ABC**
 - **ElDiario**
-- **Europa Press**
+- **El Confidencial**
 - **La Vanguardia**
 - **20minutos**
 - **OK Diario**
