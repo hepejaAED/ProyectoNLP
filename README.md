@@ -1,6 +1,5 @@
 # ProyectoNLP
 
-
 Juan Alcaráz Otón, Xueyao An, Fabián Calvo Castillo, Adrián Carrasco Alcalá, Javier Herrero Pérez, Clara Montalvá Barcenilla y Mario Martinez Guillen
 
 
