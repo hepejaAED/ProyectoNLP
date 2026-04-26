@@ -138,7 +138,7 @@ def extraer_articulo(url_articulo, categoria):
         "Fecha": fecha, #la fecha de publicación del artículo
         "Título": data.get('headline'), #el título del artículo
         "Subtítulo": data.get('description'), #el subtítulo del artículo
-        "Categoria": categoria, #la categoría a la que pertenece el artículo
+        "Categoría": categoria, #la categoría a la que pertenece el artículo
         "Contenido": data.get('articleBody') #el contenido del artículo
     }
 
