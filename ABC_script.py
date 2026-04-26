@@ -227,5 +227,3 @@ for categoria, url_categoria in categorias.items():
 #comprobamos que se han guardado correctamente los datos en el archivo JSON
 articulos_guardados = cargar_json(ARCHIVO_JSON) #cargamos los artículos guardados desde el archivo JSON
 print(f"Total artículos guardados en {ARCHIVO_JSON}: {len(articulos_guardados)}") #imprimimos el total de artículos guardados
-
-
