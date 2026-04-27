@@ -33,14 +33,37 @@ def extraer_contenido(url):
     except Exception:
         return None
 
-def obtener_noticias_vanguardia(num_por_categoria=5, archivo_salida=None):
 
-    nombre_carpeta="data"
+def guardar_sin_duplicados(nuevos_datos, archivo='data/lavanguardia.json'):
 
-    if archivo_salida is None:# se define nombre del json final noticias_lv_fechahoy
-        fecha_hoy = datetime.now().strftime("%Y-%m-%d")
-        nombre_archivo = f"noticias_lv_{fecha_hoy}.json"
-        archivo_salida = os.path.join(nombre_carpeta, nombre_archivo)
+    carpeta = os.path.dirname(archivo)
+    if carpeta and not os.path.exists(carpeta):
+        os.makedirs(carpeta)
+
+    # Cargar datos existentes
+    try:
+        with open(archivo, 'r', encoding='utf-8') as f:
+            datos_existentes = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        print(f"Archivo no existe o está vacío. Iniciando desde cero en {archivo}.")
+        datos_existentes = []
+
+    links_existentes = {item['Link'] for item in datos_existentes}
+
+    nuevos_agregados = 0
+    for item in nuevos_datos:
+        if item['Link'] not in links_existentes:
+            datos_existentes.append(item)
+            links_existentes.add(item['Link'])
+            nuevos_agregados += 1
+            
+    
+    with open(archivo, 'w', encoding='utf-8') as f:
+        json.dump(datos_existentes, f, ensure_ascii=False, indent=4)
+        
+    return datos_existentes
+
+def obtener_noticias_vanguardia(num_por_categoria=5, archivo_salida='data/lavanguardia.json'):
     
     noticias_finales = []
 
@@ -61,9 +84,12 @@ def obtener_noticias_vanguardia(num_por_categoria=5, archivo_salida=None):
             
             subtitulo = limpiar_html(entry.get("summary", ""))
             contenido = extraer_contenido(link)
-
+            
+            if not contenido:
+                contenido = subtitulo if subtitulo else "No se pudo extraer el contenido."
+            
             if contenido:
-                contenido = contenido.replace('\n',' ')
+                contenido = contenido.replace('\n', ' ')
             
             articulo = { #diccionario con todo
                 "Link": link,
@@ -77,7 +103,6 @@ def obtener_noticias_vanguardia(num_por_categoria=5, archivo_salida=None):
             
             noticias_finales.append(articulo)
 
-    with open(archivo_salida, 'w', encoding='utf-8') as f:
-        json.dump(noticias_finales, f, ensure_ascii=False, indent=4)
+    datos_actualizados = guardar_sin_duplicados(noticias_finales, archivo=archivo_salida)
 
-    return noticias_finales
+    return datos_actualizados
