@@ -168,7 +168,7 @@ def extraer_articulo(url_articulo, categoria):
 # %%
 # Automatizar las 3 categorías principales: Nacional, Internacional y Deportes
 
-ARCHIVO_JSON = "data/ABC.json"
+ARCHIVO_JSON = "../data/ABC.json"
 
 # Funcion para cargar datos existentes desde el archivo JSON
 

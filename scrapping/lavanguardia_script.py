@@ -34,7 +34,7 @@ def extraer_contenido(url):
         return None
 
 
-def guardar_sin_duplicados(nuevos_datos, archivo='data/lavanguardia.json'):
+def guardar_sin_duplicados(nuevos_datos, archivo='../data/lavanguardia.json'):
 
     carpeta = os.path.dirname(archivo)
     if carpeta and not os.path.exists(carpeta):
@@ -63,7 +63,7 @@ def guardar_sin_duplicados(nuevos_datos, archivo='data/lavanguardia.json'):
         
     return datos_existentes
 
-def obtener_noticias_vanguardia(num_por_categoria=5, archivo_salida='data/lavanguardia.json'):
+def obtener_noticias_vanguardia(num_por_categoria=5, archivo_salida='../data/lavanguardia.json'):
     
     noticias_finales = []
 
