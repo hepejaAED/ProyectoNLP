@@ -1,0 +1,38 @@
+# =========================
+# Claves y variables privadas
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.python-version
+
+# Entornos virtuales
+.venv/
+venv/
+env/
+
+# =========================
+# Streamlit
+# =========================
+.streamlit/secrets.toml
+
+# =========================
+# Jupyter
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# Sistema operativo / editores
+# =========================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
