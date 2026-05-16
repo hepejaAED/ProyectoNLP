@@ -36,3 +36,6 @@ env/
 Thumbs.db
 .vscode/
 .idea/
+
+pendientes/*.json
+!pendientes/.gitkeep

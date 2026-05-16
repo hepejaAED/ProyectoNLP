@@ -5,7 +5,10 @@ import json
 import os
 import re
 import time
+import html as html_lib
+import xml.etree.ElementTree as ET
 from datetime import datetime
+from email.utils import parsedate_to_datetime
 from pathlib import Path
 from typing import Literal
 from urllib.parse import urljoin, urlparse, urlunparse
@@ -32,10 +35,10 @@ BASE_DIR = Path(__file__).parent.resolve()
 DATA_DIR = BASE_DIR / "data"
 RAZONAMIENTOS_DIR = BASE_DIR / "razonamientos"
 
-APP_VERSION = "3.4"
+APP_VERSION = "4.0"
 
 HEADERS = {
-    "User-Agent": "ProyectoAcademicoClickbait/3.0"
+    "User-Agent": "ProyectoAcademicoClickbait/4.0 (+uso académico; contacto: localhost)"
 }
 
 ABC_CATEGORIAS = {
@@ -87,6 +90,53 @@ HUFFPOST_CATEGORIAS = {
     },
 }
 
+OKDIARIO_CATEGORIAS = {
+    "Nacional": "https://okdiario.com/espana/feed",
+    "Internacional": "https://okdiario.com/internacional/feed",
+    "Cultura": "https://okdiario.com/cultura/feed",
+}
+
+MINUTOS20_CATEGORIAS = {
+    "Nacional": "https://www.20minutos.es/rss/nacional/",
+    "Internacional": "https://www.20minutos.es/rss/internacional/",
+    "Cultura": "https://www.20minutos.es/rss/cultura/",
+}
+
+ELCONFIDENCIAL_CATEGORIAS = {
+    "Nacional": "https://rss.elconfidencial.com/espana/",
+    "Internacional": "https://rss.elconfidencial.com/mundo/",
+    "Cultura": "https://rss.elconfidencial.com/cultura/",
+}
+
+ELDIARIO_CATEGORIAS = {
+    "Nacional": "https://www.eldiario.es/rss/politica",
+    "Internacional": "https://www.eldiario.es/rss/internacional",
+    "Cultura": "https://www.eldiario.es/rss/cultura",
+}
+
+RTVE_CATEGORIAS = {
+    "Nacional": "https://www.rtve.es/noticias/espana/",
+    "Internacional": "https://www.rtve.es/noticias/internacional/",
+    "Cultura": "https://www.rtve.es/noticias/cultura/",
+}
+
+MEDITERRANEO_CATEGORIAS = {
+    "Internacional": [
+        {"seccion": "internacional", "extension": "internacional"},
+    ],
+    "Nacional": [
+        {"seccion": "espana/andalucia", "extension": "espana/andalucia"},
+        {"seccion": "espana/ceuta-y-melilla", "extension": "espana/ceuta-y-melilla"},
+        {"seccion": "sucesos-espana", "extension": "sucesos-espana"},
+    ],
+}
+
+LAVANGUARDIA_CATEGORIAS = {
+    "Nacional": "https://www.lavanguardia.com/politica",
+    "Internacional": "https://www.lavanguardia.com/internacional",
+    "Cultura": "https://www.lavanguardia.com/cultura",
+}
+
 CAMPOS_NOTICIA = [
     "Link",
     "Periódico",
@@ -128,375 +178,7 @@ CAMPOS_LOG = [
 
 
 # ============================================================
-# 2. ESTILO VISUAL
-# ============================================================
-
-def aplicar_estilo_neobrutalist() -> None:
-    """Aplica estilo neobrutalist sin tocar la lógica del agente."""
-    st.markdown(
-        """
-        <style>
-        /* =========================
-        OCULTAR BARRA SUPERIOR STREAMLIT
-        PERO MANTENER BOTÓN DE SIDEBAR
-        ========================= */
-
-        header[data-testid="stHeader"] {
-            height: 0rem !important;
-            min-height: 0rem !important;
-            background: transparent !important;
-            pointer-events: none !important;
-        }
-
-        div[data-testid="stToolbar"] {
-            display: none !important;
-        }
-
-        div[data-testid="stDecoration"] {
-            display: none !important;
-        }
-
-        div[data-testid="stStatusWidget"] {
-            display: none !important;
-        }
-
-        #MainMenu {
-            visibility: hidden !important;
-        }
-
-        /* Botón que reaparece cuando la sidebar está cerrada */
-        div[data-testid="collapsedControl"] {
-            display: flex !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-            position: fixed !important;
-            top: 0.75rem !important;
-            left: 0.75rem !important;
-            z-index: 999999 !important;
-            pointer-events: auto !important;
-        }
-
-        div[data-testid="collapsedControl"] button {
-            background: #ff4d6d !important;
-            color: #111111 !important;
-            border: 3px solid #111111 !important;
-            border-radius: 0 !important;
-            box-shadow: 4px 4px 0 #111111 !important;
-            font-weight: 900 !important;
-        }
-
-        div[data-testid="collapsedControl"] button:hover {
-            background: #ffbe0b !important;
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0 #111111 !important;
-        }
-
-        /* =========================
-           ESTILO GENERAL
-        ========================= */
-
-        html, body, [class*="css"] {
-            font-family: "Arial", "Helvetica", sans-serif;
-        }
-
-        .stApp {
-            background:
-                radial-gradient(circle at top left, #ffe45e 0, #ffe45e 17%, transparent 17%),
-                linear-gradient(135deg, #f7f3e8 0%, #f7f3e8 100%);
-            color: #111111;
-        }
-
-        .block-container {
-            max-width: 1180px;
-            padding-top: 1.5rem !important;
-            padding-bottom: 4rem;
-        }
-
-        h1 {
-            font-size: 3rem !important;
-            font-weight: 900 !important;
-            line-height: 1.05 !important;
-            color: #111111 !important;
-            background: #ffffff;
-            border: 4px solid #111111;
-            box-shadow: 8px 8px 0 #111111;
-            padding: 1rem 1.25rem;
-            margin-bottom: 1.25rem;
-        }
-
-        h2, h3 {
-            font-weight: 900 !important;
-            color: #111111 !important;
-        }
-
-        p, label, span, div {
-            color: #111111;
-        }
-
-        /* =========================
-           SIDEBAR
-        ========================= */
-
-        section[data-testid="stSidebar"] {
-            background: #8ecae6;
-            border-right: 5px solid #111111;
-        }
-
-        section[data-testid="stSidebar"] > div {
-            padding-top: 2rem;
-        }
-
-        section[data-testid="stSidebar"] h2,
-        section[data-testid="stSidebar"] h3 {
-            color: #111111 !important;
-            font-weight: 900 !important;
-        }
-
-        section[data-testid="stSidebar"] .stAlert {
-            background: #ffdd00;
-            border: 3px solid #111111;
-            box-shadow: 5px 5px 0 #111111;
-            border-radius: 0;
-        }
-
-        /* =========================
-           BOTONES
-        ========================= */
-
-        .stButton > button,
-        .stDownloadButton > button {
-            background: #ff4d6d !important;
-            color: #111111 !important;
-            border: 3px solid #111111 !important;
-            border-radius: 0 !important;
-            box-shadow: 5px 5px 0 #111111 !important;
-            font-weight: 900 !important;
-            text-transform: uppercase;
-            transition: all 0.08s ease-in-out;
-        }
-
-        .stButton > button:hover,
-        .stDownloadButton > button:hover {
-            transform: translate(3px, 3px);
-            box-shadow: 2px 2px 0 #111111 !important;
-            background: #ffbe0b !important;
-            color: #111111 !important;
-            border-color: #111111 !important;
-        }
-
-        .stButton > button:active,
-        .stDownloadButton > button:active {
-            transform: translate(5px, 5px);
-            box-shadow: none !important;
-        }
-
-        /* =========================
-           INPUTS, SELECTS, MULTISELECTS
-        ========================= */
-
-        div[data-baseweb="select"] {
-            margin-bottom: 1rem !important;
-        }
-
-        div[data-baseweb="select"] > div {
-            background: #ffffff !important;
-            border: 3px solid #111111 !important;
-            border-radius: 0 !important;
-            box-shadow: 4px 4px 0 #111111 !important;
-            color: #111111 !important;
-            min-height: 3.2rem !important;
-            height: auto !important;
-            padding: 0.35rem 0.5rem !important;
-            align-items: center !important;
-            overflow: visible !important;
-        }
-
-        div[data-baseweb="select"] input {
-            border: none !important;
-            box-shadow: none !important;
-            min-width: 7rem !important;
-            padding: 0 !important;
-            background: transparent !important;
-        }
-
-        div[data-baseweb="select"] svg {
-            color: #111111 !important;
-        }
-
-        div[data-baseweb="input"] > div,
-        textarea,
-        input {
-            background: #ffffff !important;
-            border: 3px solid #111111 !important;
-            border-radius: 0 !important;
-            box-shadow: 4px 4px 0 #111111 !important;
-            color: #111111 !important;
-        }
-
-        div[data-baseweb="tag"] {
-            background: #fb5607 !important;
-            color: #ffffff !important;
-            border: 2px solid #111111 !important;
-            border-radius: 0 !important;
-            font-weight: 800 !important;
-            height: auto !important;
-            min-height: 1.8rem !important;
-            margin: 0.15rem 0.25rem 0.15rem 0 !important;
-            max-width: 95% !important;
-        }
-
-        div[data-baseweb="tag"] span {
-            color: #ffffff !important;
-            white-space: nowrap !important;
-            overflow: hidden !important;
-            text-overflow: ellipsis !important;
-        }
-
-        div[data-testid="stSlider"] {
-            background: #ffffff;
-            border: 3px solid #111111;
-            box-shadow: 4px 4px 0 #111111;
-            padding: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        /* =========================
-           EXPANDERS / TARJETAS
-        ========================= */
-
-        div[data-testid="stExpander"] {
-            background: #ffffff;
-            border: 4px solid #111111 !important;
-            border-radius: 0 !important;
-            box-shadow: 7px 7px 0 #111111;
-            margin-bottom: 1.25rem;
-        }
-
-        div[data-testid="stExpander"] summary {
-            font-weight: 900 !important;
-            background: #ffdd00;
-            border-bottom: 3px solid #111111;
-            padding: 0.75rem 1rem;
-        }
-
-        div[data-testid="stExpander"] details {
-            border-radius: 0 !important;
-        }
-
-        /* =========================
-           MÉTRICAS
-        ========================= */
-
-        div[data-testid="metric-container"] {
-            background: #ffffff;
-            border: 4px solid #111111;
-            border-radius: 0;
-            box-shadow: 6px 6px 0 #111111;
-            padding: 1rem;
-        }
-
-        div[data-testid="metric-container"] label {
-            font-weight: 900 !important;
-            color: #111111 !important;
-        }
-
-        div[data-testid="metric-container"] [data-testid="stMetricValue"] {
-            font-size: 2rem !important;
-            font-weight: 900 !important;
-            color: #111111 !important;
-        }
-
-        /* =========================
-           ALERTAS
-        ========================= */
-
-        div[data-testid="stAlert"] {
-            border: 4px solid #111111;
-            border-radius: 0;
-            box-shadow: 6px 6px 0 #111111;
-            font-weight: 700;
-        }
-
-        /* =========================
-           TABLAS
-        ========================= */
-
-        div[data-testid="stDataFrame"] {
-            border: 4px solid #111111;
-            box-shadow: 7px 7px 0 #111111;
-            background: #ffffff;
-            padding: 0.25rem;
-        }
-
-        /* =========================
-           PROGRESS BAR
-        ========================= */
-
-        div[data-testid="stProgress"] > div {
-            background: #ffffff;
-            border: 3px solid #111111;
-            border-radius: 0;
-        }
-
-        div[data-testid="stProgress"] div div div {
-            background-color: #3a86ff !important;
-        }
-
-        /* =========================
-           DIVIDERS
-        ========================= */
-
-        hr {
-            border: none;
-            border-top: 5px solid #111111;
-            margin: 2rem 0;
-        }
-
-        /* =========================
-           LINKS
-        ========================= */
-
-        a {
-            color: #3a0ca3 !important;
-            font-weight: 800;
-            text-decoration: underline;
-        }
-
-        a:hover {
-            color: #fb5607 !important;
-        }
-
-        /* =========================
-           CAPTION
-        ========================= */
-
-        div[data-testid="stCaptionContainer"] {
-            background: #ffffff;
-            border: 3px solid #111111;
-            box-shadow: 5px 5px 0 #111111;
-            padding: 0.75rem 1rem;
-            margin-bottom: 1.5rem;
-            font-weight: 700;
-        }
-
-        /* =========================
-           JSON VIEWER
-        ========================= */
-
-        pre {
-            background: #ffffff !important;
-            border: 4px solid #111111 !important;
-            border-radius: 0 !important;
-            box-shadow: 6px 6px 0 #111111 !important;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
-
-
-# ============================================================
-# 3. FUNCIONES DE LIMPIEZA, JSON Y LOGS
+# 2. FUNCIONES DE LIMPIEZA, JSON Y LOGS
 # ============================================================
 
 def limpiar_texto(texto: str | None) -> str | None:
@@ -504,19 +186,31 @@ def limpiar_texto(texto: str | None) -> str | None:
     if texto is None:
         return None
 
-    texto = str(texto)
+    texto = html_lib.unescape(str(texto))
     texto = re.sub(r"\s+", " ", texto)
     return texto.strip()
+
+
+def limpiar_html(texto_html: str | None, quitar_enlaces: bool = False) -> str | None:
+    """Convierte un fragmento HTML en texto limpio."""
+    if not texto_html:
+        return None
+
+    soup = BeautifulSoup(str(texto_html), "html.parser")
+
+    if quitar_enlaces:
+        for a in soup.find_all("a"):
+            a.decompose()
+
+    for tag in soup(["script", "style", "noscript"]):
+        tag.decompose()
+
+    return limpiar_texto(soup.get_text(" ", strip=True))
 
 
 def limpiar_campo_tsv(valor: object) -> str:
     """
     Limpia un valor antes de escribirlo en el log separado por tabuladores.
-
-    Motivo:
-    - Los tabuladores dentro de un campo rompen columnas.
-    - Los saltos de línea dentro de RespuestaAgente hacen que Excel/editores
-      parezcan desalinear filas.
     """
     if valor is None:
         return ""
@@ -533,9 +227,27 @@ def normalizar_url(url: str | None) -> str:
     if not url:
         return ""
 
-    parsed = urlparse(str(url))
+    parsed = urlparse(str(url).strip())
     parsed = parsed._replace(fragment="")
     return urlunparse(parsed)
+
+
+def normalizar_bool(valor: object) -> bool:
+    """Convierte valores del LLM a booleano evitando que 'False' sea True."""
+    if isinstance(valor, bool):
+        return valor
+
+    if isinstance(valor, (int, float)):
+        return bool(valor)
+
+    if isinstance(valor, str):
+        texto = valor.strip().lower()
+        if texto in {"true", "1", "sí", "si", "yes", "clickbait"}:
+            return True
+        if texto in {"false", "0", "no", "no clickbait", "noclickbait"}:
+            return False
+
+    return bool(valor)
 
 
 def cargar_json(ruta: Path) -> list[dict]:
@@ -550,7 +262,12 @@ def cargar_json(ruta: Path) -> list[dict]:
     if not contenido:
         return []
 
-    return json.loads(contenido)
+    datos = json.loads(contenido)
+
+    if not isinstance(datos, list):
+        raise ValueError(f"El archivo {ruta} existe, pero no contiene una lista JSON.")
+
+    return datos
 
 
 def guardar_json(ruta: Path, datos: list[dict]) -> None:
@@ -581,7 +298,7 @@ def normalizar_clasificacion(cb: bool, cb_score: float, cb_label: str) -> dict:
     cb_score representa confianza en la etiqueta asignada, de 0 a 1.
     Por eso una noticia NO clickbait puede tener cb_score=0.9273.
     """
-    cb_bool = bool(cb)
+    cb_bool = normalizar_bool(cb)
 
     try:
         score = float(cb_score)
@@ -593,7 +310,6 @@ def normalizar_clasificacion(cb: bool, cb_score: float, cb_label: str) -> dict:
 
     etiqueta = "Clickbait" if cb_bool else "NO Clickbait"
 
-    # Si el modelo manda una etiqueta contradictoria, priorizamos cb.
     if cb_label not in {"Clickbait", "NO Clickbait"}:
         cb_label = etiqueta
 
@@ -648,14 +364,17 @@ def buscar_indice_por_link(articulos: list[dict], link: str | None) -> int | Non
 def obtener_ruta_json_medio(periodico: str) -> Path:
     """
     Devuelve el JSON correspondiente al medio.
-
-    Los nombres respetan la estructura de ficheros del proyecto:
-    - ABC -> data/ABC.json
-    - HuffPost -> data/elhuffpost.json
     """
     rutas = {
         "ABC": DATA_DIR / "ABC.json",
         "HuffPost": DATA_DIR / "elhuffpost.json",
+        "OkDiario": DATA_DIR / "okdiario.json",
+        "20minutos": DATA_DIR / "20minutos.json",
+        "El Confidencial": DATA_DIR / "elconfidencial.json",
+        "ElDiario": DATA_DIR / "eldiario.json",
+        "RTVE": DATA_DIR / "RTVE.json",
+        "Mediterráneo Digital": DATA_DIR / "mediterraneodigital.json",
+        "La Vanguardia": DATA_DIR / "lavanguardia.json",
     }
 
     if periodico not in rutas:
@@ -693,7 +412,6 @@ def guardar_articulo_clasificado(
     """
     Guarda una noticia clasificada en el JSON del medio correspondiente.
 
-    Criterio v3:
     - Si la noticia NO existe, se añade.
     - Si la noticia YA existe, no se sobrescribe y no se duplica.
     """
@@ -745,9 +463,6 @@ def deduplicar_articulos(articulos: list[dict]) -> list[dict]:
 def crear_ruta_log_ejecucion() -> Path:
     """
     Crea una ruta de log por ejecución con formato yyyy-mm-dd-HH_mm.csv.
-
-    Si se lanzan dos ejecuciones en el mismo minuto, se añade sufijo -02,
-    -03, etc. para no sobrescribir ni mezclar ejecuciones.
     """
     RAZONAMIENTOS_DIR.mkdir(exist_ok=True)
     fecha = datetime.now().strftime("%Y-%m-%d-%H_%M")
@@ -762,8 +477,6 @@ def crear_ruta_log_ejecucion() -> Path:
         if not ruta_candidata.exists():
             return ruta_candidata
 
-    # Caso muy improbable: si hay más de 98 ejecuciones en un minuto,
-    # añadimos segundos para seguir evitando sobrescrituras.
     fecha_con_segundos = datetime.now().strftime("%Y-%m-%d-%H_%M_%S")
     return RAZONAMIENTOS_DIR / f"{fecha_con_segundos}.csv"
 
@@ -803,8 +516,6 @@ def guardar_razonamiento_csv(
         "RespuestaAgente": respuesta_agente,
     }
 
-    # Importante: limpiamos cada campo para que cada noticia ocupe una sola línea
-    # y no se rompan las columnas al abrirlo en Excel, LibreOffice o editores de texto.
     fila = {
         campo: limpiar_campo_tsv(fila_sin_limpiar.get(campo, ""))
         for campo in CAMPOS_LOG
@@ -812,7 +523,6 @@ def guardar_razonamiento_csv(
 
     existe = ruta_log.exists()
 
-    # utf-8-sig ayuda a que Excel reconozca mejor acentos y eñes.
     with ruta_log.open("a", encoding="utf-8-sig", newline="") as f:
         writer = csv.DictWriter(
             f,
@@ -831,27 +541,195 @@ def guardar_razonamiento_csv(
 
 
 # ============================================================
-# 4. DESCARGA HTML
+# 3. DESCARGA HTML / RSS
 # ============================================================
 
-def obtener_soup(url: str) -> BeautifulSoup:
+def obtener_soup(url: str, timeout: int = 15) -> BeautifulSoup:
     """Descarga una página y la transforma en objeto BeautifulSoup."""
-    response = requests.get(url, headers=HEADERS, timeout=10)
+    response = requests.get(url, headers=HEADERS, timeout=timeout)
     response.raise_for_status()
     return BeautifulSoup(response.text, "html.parser")
 
 
+def obtener_bytes(url: str, timeout: int = 15) -> bytes:
+    """Descarga contenido binario/textual manteniendo headers comunes."""
+    response = requests.get(url, headers=HEADERS, timeout=timeout)
+    response.raise_for_status()
+    return response.content
+
+
+def parsear_fecha_rss(fecha_raw: str | None) -> str | None:
+    """Convierte una fecha RSS a YYYY-MM-DD."""
+    if not fecha_raw:
+        return None
+
+    try:
+        return parsedate_to_datetime(fecha_raw).strftime("%Y-%m-%d")
+    except Exception:
+        match = re.search(r"\d{4}-\d{2}-\d{2}", fecha_raw)
+        return match.group(0) if match else None
+
+
+def nombre_local_xml(tag: str) -> str:
+    """Devuelve el nombre local de una etiqueta XML con o sin namespace."""
+    if "}" in tag:
+        return tag.split("}", 1)[1]
+    return tag.split(":")[-1]
+
+
+def texto_xml(item: ET.Element, nombres: set[str], ultimo: bool = False) -> str | None:
+    """Extrae texto de hijos XML comparando por nombre local."""
+    coincidencias = []
+
+    for child in list(item):
+        if nombre_local_xml(child.tag) in nombres:
+            texto = "".join(child.itertext()).strip()
+            if texto:
+                coincidencias.append(texto)
+
+    if not coincidencias:
+        return None
+
+    return coincidencias[-1] if ultimo else coincidencias[0]
+
+
+def extraer_items_rss(url: str) -> list[ET.Element]:
+    """Extrae items de un RSS usando ElementTree; si falla, devuelve lista vacía."""
+    contenido = obtener_bytes(url)
+
+    try:
+        root = ET.fromstring(contenido)
+    except Exception:
+        return []
+
+    return list(root.findall(".//item"))
+
+
+def extraer_json_ld(soup: BeautifulSoup) -> list[dict]:
+    """Devuelve diccionarios JSON-LD presentes en una página."""
+    resultados: list[dict] = []
+
+    def recolectar(objeto):
+        if isinstance(objeto, dict):
+            resultados.append(objeto)
+            for valor in objeto.values():
+                recolectar(valor)
+        elif isinstance(objeto, list):
+            for item in objeto:
+                recolectar(item)
+
+    scripts = soup.find_all("script", type="application/ld+json")
+
+    for script in scripts:
+        texto = script.get_text(strip=True)
+        if not texto:
+            continue
+
+        try:
+            data = json.loads(texto, strict=False)
+        except Exception:
+            continue
+
+        recolectar(data)
+
+    return resultados
+
+
+def extraer_campo_json_ld(soup: BeautifulSoup, campos: list[str]) -> str | None:
+    """Busca el primer campo disponible en objetos JSON-LD."""
+    for obj in extraer_json_ld(soup):
+        for campo in campos:
+            valor = obj.get(campo)
+            if isinstance(valor, str) and valor.strip():
+                return limpiar_texto(valor)
+    return None
+
+
+def extraer_meta(soup: BeautifulSoup, nombres: list[dict]) -> str | None:
+    """Busca content en meta tags por atributos."""
+    for attrs in nombres:
+        tag = soup.find("meta", attrs=attrs)
+        if tag and tag.get("content"):
+            return limpiar_texto(tag.get("content"))
+    return None
+
+
 # ============================================================
-# 5. LECTORES DE MEDIOS
+# 4. LECTORES DE MEDIOS
 # ============================================================
+
+class LectorRSSBase:
+    """Lector base para medios que exponen noticias por RSS."""
+
+    periodico = ""
+    categorias: dict[str, str] = {}
+    usar_resumen_como_contenido = False
+    quitar_enlaces_subtitulo = False
+
+    def __init__(self) -> None:
+        self._cache: dict[str, dict] = {}
+
+    def obtener_links_categoria(self, categoria: str, max_links: int = 5) -> list[str]:
+        url_feed = self.categorias[categoria]
+        articulos = self.extraer_articulos_feed(url_feed, categoria, max_links)
+
+        links = []
+        for articulo in articulos:
+            link = normalizar_url(articulo.get("Link"))
+            if not link:
+                continue
+            self._cache[link] = articulo
+            links.append(link)
+
+        return links
+
+    def extraer_articulo(self, url_articulo: str, categoria: str) -> dict | None:
+        return self._cache.get(normalizar_url(url_articulo))
+
+    def extraer_articulos_feed(self, url_feed: str, categoria: str, max_links: int) -> list[dict]:
+        articulos: list[dict] = []
+
+        try:
+            items = extraer_items_rss(url_feed)
+        except Exception as exc:
+            print(f"Error leyendo RSS {url_feed}: {exc}")
+            return articulos
+
+        for item in items[:max_links]:
+            titulo = texto_xml(item, {"title"})
+            link = texto_xml(item, {"link"})
+            fecha_raw = texto_xml(item, {"pubDate", "published", "updated"})
+            descripcion_html = texto_xml(item, {"description", "summary"})
+            contenido_html = texto_xml(item, {"encoded", "content"}, ultimo=True)
+
+            subtitulo = limpiar_html(
+                descripcion_html,
+                quitar_enlaces=self.quitar_enlaces_subtitulo,
+            )
+
+            if self.usar_resumen_como_contenido:
+                contenido = subtitulo
+            else:
+                contenido = limpiar_html(contenido_html) or subtitulo
+
+            articulo = {
+                "Link": normalizar_url(link),
+                "Periódico": self.periodico,
+                "Fecha": parsear_fecha_rss(fecha_raw),
+                "Título": limpiar_texto(titulo),
+                "Subtítulo": subtitulo,
+                "Categoría": categoria,
+                "Contenido": contenido,
+            }
+
+            if articulo["Link"] and articulo["Título"] and articulo["Contenido"]:
+                articulos.append(articulo)
+
+        return articulos
+
 
 class LectorABC:
-    """
-    Lector específico para ABC.
-
-    Devuelve cada noticia con la estructura común:
-    Link, Periódico, Fecha, Título, Subtítulo, Categoría, Contenido.
-    """
+    """Lector específico para ABC."""
 
     periodico = "ABC"
     categorias = ABC_CATEGORIAS
@@ -943,12 +821,7 @@ class LectorABC:
 
 
 class LectorHuffPost:
-    """
-    Lector específico para HuffPost.
-
-    Está preparado con la misma interfaz que LectorABC para poder
-    añadir más medios sin tocar el agente.
-    """
+    """Lector específico para HuffPost."""
 
     periodico = "HuffPost"
     dominio = "www.huffingtonpost.es"
@@ -990,7 +863,6 @@ class LectorHuffPost:
                 if len(links) >= max_links:
                     return links
 
-            # Pequeña pausa entre páginas de listado del mismo medio.
             time.sleep(0.3)
 
             if len(links) >= max_links:
@@ -999,35 +871,8 @@ class LectorHuffPost:
         return links
 
     def extraer_fecha_json_ld(self, soup: BeautifulSoup) -> str | None:
-        """
-        Intenta obtener datePublished de JSON-LD.
-        Si no aparece, se usará la fecha actual.
-        """
-        scripts = soup.find_all("script", type="application/ld+json")
-
-        for script in scripts:
-            texto = script.get_text(strip=True)
-
-            if not texto:
-                continue
-
-            try:
-                data = json.loads(texto, strict=False)
-            except Exception:
-                continue
-
-            candidatos = data if isinstance(data, list) else [data]
-
-            for item in candidatos:
-                if not isinstance(item, dict):
-                    continue
-
-                fecha = item.get("datePublished") or item.get("dateModified")
-
-                if fecha:
-                    return str(fecha)[:10]
-
-        return None
+        fecha = extraer_campo_json_ld(soup, ["datePublished", "dateModified"])
+        return fecha[:10] if fecha else None
 
     def extraer_articulo(self, url_articulo: str, categoria: str) -> dict | None:
         try:
@@ -1054,8 +899,6 @@ class LectorHuffPost:
             if not fecha:
                 fecha = datetime.now().strftime("%Y-%m-%d")
 
-            # En HuffPost, la sección Virales se guarda como Cultura
-            # para mantener la taxonomía común del dataset.
             categoria_guardado = "Cultura" if categoria == "Virales" else categoria
 
             articulo = {
@@ -1078,17 +921,372 @@ class LectorHuffPost:
             return None
 
 
+class LectorOkDiario(LectorRSSBase):
+    periodico = "OkDiario"
+    categorias = OKDIARIO_CATEGORIAS
+    quitar_enlaces_subtitulo = True
+
+
+class Lector20Minutos(LectorRSSBase):
+    periodico = "20minutos"
+    categorias = MINUTOS20_CATEGORIAS
+
+
+class LectorElConfidencial(LectorRSSBase):
+    periodico = "El Confidencial"
+    categorias = ELCONFIDENCIAL_CATEGORIAS
+
+
+class LectorElDiario(LectorRSSBase):
+    periodico = "ElDiario"
+    categorias = ELDIARIO_CATEGORIAS
+    usar_resumen_como_contenido = True
+
+    def extraer_articulos_feed(self, url_feed: str, categoria: str, max_links: int) -> list[dict]:
+        articulos = super().extraer_articulos_feed(url_feed, categoria, max_links)
+        for articulo in articulos:
+            articulo["Subtítulo"] = articulo.get("Subtítulo") or ""
+        return articulos
+
+
+class LectorRTVE:
+    """Lector específico para RTVE basado en scraping de secciones."""
+
+    periodico = "RTVE"
+    categorias = RTVE_CATEGORIAS
+
+    def limpiar_titulo(self, titulo: str | None) -> str | None:
+        titulo = limpiar_texto(titulo)
+        if not titulo:
+            return None
+        return re.sub(r"^\d{1,2}:\d{2}\s*min", "", titulo).strip()
+
+    def obtener_links_categoria(self, categoria: str, max_links: int = 5) -> list[str]:
+        url_categoria = self.categorias[categoria]
+        soup = obtener_soup(url_categoria, timeout=20)
+        articles = soup.find_all("article")
+
+        links: list[str] = []
+
+        for art in articles:
+            a_tag = art.find("a", href=True)
+            if not a_tag:
+                continue
+
+            link = normalizar_url(urljoin(url_categoria, a_tag["href"]))
+
+            if "/noticias/" not in link:
+                continue
+
+            if link not in links:
+                links.append(link)
+
+            if len(links) >= max_links:
+                break
+
+        return links
+
+    def extraer_fecha(self, soup: BeautifulSoup) -> str | None:
+        time_tag = soup.find("time")
+
+        if time_tag:
+            raw = time_tag.get("datetime") or time_tag.get_text(" ", strip=True)
+            match = re.search(r"\d{4}-\d{2}-\d{2}", raw)
+            if match:
+                return match.group(0)
+
+        meta = soup.find("meta", attrs={"property": "article:published_time"})
+        if meta and meta.get("content"):
+            match = re.search(r"\d{4}-\d{2}-\d{2}", meta["content"])
+            if match:
+                return match.group(0)
+
+        return None
+
+    def extraer_articulo(self, url_articulo: str, categoria: str) -> dict | None:
+        try:
+            soup = obtener_soup(url_articulo, timeout=20)
+
+            titulo = self.limpiar_titulo(
+                extraer_meta(soup, [{"property": "og:title"}])
+                or (soup.find("h1").get_text(" ", strip=True) if soup.find("h1") else None)
+            )
+
+            subtitulo = extraer_meta(soup, [{"name": "description"}, {"property": "og:description"}])
+
+            article = soup.find("article")
+            parrafos = article.find_all("p") if article else soup.find_all("p")
+
+            textos = []
+            for p in parrafos:
+                txt = limpiar_texto(p.get_text(" ", strip=True))
+                if txt and len(txt) > 40:
+                    textos.append(txt)
+
+            if subtitulo and textos and textos[0] == subtitulo:
+                textos = textos[1:]
+
+            contenido = " ".join(textos[:8]) if textos else ""
+
+            articulo = {
+                "Link": normalizar_url(url_articulo),
+                "Periódico": self.periodico,
+                "Fecha": self.extraer_fecha(soup),
+                "Título": titulo,
+                "Subtítulo": subtitulo,
+                "Categoría": categoria,
+                "Contenido": limpiar_texto(contenido),
+            }
+
+            if not articulo["Título"] or not articulo["Contenido"]:
+                return None
+
+            return articulo
+
+        except Exception as exc:
+            print(f"Error extrayendo RTVE {url_articulo}: {exc}")
+            return None
+
+
+class LectorMediterraneoDigital:
+    """Lector específico para Mediterráneo Digital."""
+
+    periodico = "Mediterráneo Digital"
+    dominio = "www.mediterraneodigital.com"
+    base = f"https://{dominio}"
+    categorias = MEDITERRANEO_CATEGORIAS
+
+    def obtener_urls_config(
+        self,
+        seccion: str,
+        extension: str,
+        max_links: int,
+        limit: int = 7,
+        limite_peticiones: int = 10,
+    ) -> list[str]:
+        urls: list[str] = []
+        start = 0
+        contador = 0
+
+        while contador < limite_peticiones and len(urls) < max_links:
+            url = f"{self.base}/{seccion}?limit={limit}&start={start}&tmpl=component"
+
+            try:
+                soup = obtener_soup(url)
+            except Exception:
+                break
+
+            enlaces = soup.find_all("a", href=True)
+            nuevos: list[str] = []
+
+            for a in enlaces:
+                href = a["href"]
+                absoluta = normalizar_url(urljoin(self.base, href))
+
+                if absoluta.startswith(f"{self.base}/{extension}/"):
+                    nuevos.append(absoluta)
+
+            if not nuevos:
+                break
+
+            for u in nuevos:
+                if u not in urls:
+                    urls.append(u)
+                    if len(urls) >= max_links:
+                        break
+
+            start += limit
+            contador += 1
+
+        return urls
+
+    def obtener_links_categoria(self, categoria: str, max_links: int = 5) -> list[str]:
+        configs = self.categorias[categoria]
+        links: list[str] = []
+
+        for config in configs:
+            disponibles = self.obtener_urls_config(
+                seccion=config["seccion"],
+                extension=config["extension"],
+                max_links=max_links,
+            )
+
+            for link in disponibles:
+                if link not in links:
+                    links.append(link)
+
+                if len(links) >= max_links:
+                    return links
+
+        return links
+
+    def extraer_articulo(self, url_articulo: str, categoria: str) -> dict | None:
+        try:
+            soup = obtener_soup(url_articulo)
+
+            h1 = soup.find("h1", class_="article-title") or soup.find("h1")
+            if h1:
+                a = h1.find("a")
+                titulo = a.get_text(" ", strip=True) if a else h1.get_text(" ", strip=True)
+            else:
+                titulo = None
+
+            subtitulo = soup.find("h2")
+            subtitulo = subtitulo.get_text(" ", strip=True) if subtitulo else None
+
+            cuerpo = soup.find("section", class_="article-content clearfix") or soup.find("article")
+
+            if cuerpo:
+                parrafos = cuerpo.find_all("p")
+                contenido = "\n".join(
+                    p.get_text(" ", strip=True).replace("  ", " ")
+                    for p in parrafos
+                )
+            else:
+                contenido = ""
+
+            articulo = {
+                "Link": normalizar_url(url_articulo),
+                "Periódico": self.periodico,
+                "Fecha": datetime.now().strftime("%Y-%m-%d"),
+                "Título": limpiar_texto(titulo),
+                "Subtítulo": limpiar_texto(subtitulo),
+                "Categoría": categoria,
+                "Contenido": limpiar_texto(contenido),
+            }
+
+            if not articulo["Título"] or not articulo["Contenido"]:
+                return None
+
+            return articulo
+
+        except Exception as exc:
+            print(f"Error extrayendo Mediterráneo Digital {url_articulo}: {exc}")
+            return None
+
+
+class LectorLaVanguardia:
+    """
+    Lector específico para La Vanguardia.
+
+    El notebook subido importaba un script externo no incluido. Aquí se implementa
+    un lector directo de secciones públicas y extracción genérica por meta/JSON-LD.
+    """
+
+    periodico = "La Vanguardia"
+    dominio = "www.lavanguardia.com"
+    categorias = LAVANGUARDIA_CATEGORIAS
+
+    def obtener_links_categoria(self, categoria: str, max_links: int = 5) -> list[str]:
+        url_categoria = self.categorias[categoria]
+        soup = obtener_soup(url_categoria)
+        parsed_categoria = urlparse(url_categoria)
+        prefijo = parsed_categoria.path.rstrip("/") + "/"
+
+        links: list[str] = []
+
+        for a in soup.find_all("a", href=True):
+            href = a.get("href")
+            link = normalizar_url(urljoin(url_categoria, href))
+            parsed = urlparse(link)
+
+            if parsed.netloc != self.dominio:
+                continue
+
+            if not parsed.path.startswith(prefijo):
+                continue
+
+            # Se evitan portadas y subsecciones vacías.
+            if parsed.path.rstrip("/") == parsed_categoria.path.rstrip("/"):
+                continue
+
+            if link not in links:
+                links.append(link)
+
+            if len(links) >= max_links:
+                break
+
+        return links
+
+    def extraer_fecha(self, soup: BeautifulSoup) -> str | None:
+        fecha = extraer_campo_json_ld(soup, ["datePublished", "dateModified"])
+        if fecha:
+            match = re.search(r"\d{4}-\d{2}-\d{2}", fecha)
+            if match:
+                return match.group(0)
+
+        meta_fecha = extraer_meta(soup, [{"property": "article:published_time"}])
+        if meta_fecha:
+            match = re.search(r"\d{4}-\d{2}-\d{2}", meta_fecha)
+            if match:
+                return match.group(0)
+
+        return None
+
+    def extraer_articulo(self, url_articulo: str, categoria: str) -> dict | None:
+        try:
+            soup = obtener_soup(url_articulo)
+
+            titulo = (
+                extraer_campo_json_ld(soup, ["headline"])
+                or extraer_meta(soup, [{"property": "og:title"}])
+                or (soup.find("h1").get_text(" ", strip=True) if soup.find("h1") else None)
+            )
+
+            subtitulo = (
+                extraer_campo_json_ld(soup, ["description"])
+                or extraer_meta(soup, [{"name": "description"}, {"property": "og:description"}])
+            )
+
+            contenido = extraer_campo_json_ld(soup, ["articleBody"])
+
+            if not contenido:
+                article = soup.find("article")
+                parrafos = article.find_all("p") if article else soup.find_all("p")
+                textos = [
+                    limpiar_texto(p.get_text(" ", strip=True))
+                    for p in parrafos
+                ]
+                textos = [txt for txt in textos if txt and len(txt) > 40]
+                contenido = " ".join(textos[:10])
+
+            articulo = {
+                "Link": normalizar_url(url_articulo),
+                "Periódico": self.periodico,
+                "Fecha": self.extraer_fecha(soup),
+                "Título": limpiar_texto(titulo),
+                "Subtítulo": limpiar_texto(subtitulo),
+                "Categoría": categoria,
+                "Contenido": limpiar_texto(contenido),
+            }
+
+            if not articulo["Título"] or not articulo["Contenido"]:
+                return None
+
+            return articulo
+
+        except Exception as exc:
+            print(f"Error extrayendo La Vanguardia {url_articulo}: {exc}")
+            return None
+
+
 LECTORES = {
     "ABC": LectorABC,
     "HuffPost": LectorHuffPost,
+    "OkDiario": LectorOkDiario,
+    "20minutos": Lector20Minutos,
+    "El Confidencial": LectorElConfidencial,
+    "ElDiario": LectorElDiario,
+    "RTVE": LectorRTVE,
+    "Mediterráneo Digital": LectorMediterraneoDigital,
+    "La Vanguardia": LectorLaVanguardia,
 }
 
 
 # Relación explícita entre medios de la interfaz y ficheros de salida.
-# Para añadir más medios en el futuro, añadid el lector a LECTORES y su ruta aquí.
 ARCHIVOS_JSON_POR_MEDIO = {
-    "ABC": DATA_DIR / "ABC.json",
-    "HuffPost": DATA_DIR / "elhuffpost.json",
+    medio: obtener_ruta_json_medio(medio)
+    for medio in LECTORES.keys()
 }
 
 
@@ -1123,13 +1321,21 @@ def obtener_articulos(
             if categoria not in lector.categorias:
                 continue
 
-            links = lector.obtener_links_categoria(
-                categoria=categoria,
-                max_links=max_por_categoria,
-            )
+            try:
+                links = lector.obtener_links_categoria(
+                    categoria=categoria,
+                    max_links=max_por_categoria,
+                )
+            except Exception as exc:
+                print(f"Error obteniendo enlaces de {medio} / {categoria}: {exc}")
+                continue
 
             for link in links:
-                articulo = lector.extraer_articulo(link, categoria)
+                try:
+                    articulo = lector.extraer_articulo(link, categoria)
+                except Exception as exc:
+                    print(f"Error extrayendo artículo {link}: {exc}")
+                    articulo = None
 
                 if articulo:
                     articulos.append(articulo)
@@ -1140,7 +1346,7 @@ def obtener_articulos(
 
 
 # ============================================================
-# 6. MODELO LLM
+# 5. MODELO LLM
 # ============================================================
 
 def crear_llm(temperatura: float = 0.0) -> ChatOpenRouter:
@@ -1158,7 +1364,6 @@ def crear_llm(temperatura: float = 0.0) -> ChatOpenRouter:
     if not modelo:
         raise ValueError("Falta OPENROUTER_MODEL en el fichero .env.")
 
-    # ChatOpenRouter lee OPENROUTER_API_KEY desde el entorno.
     return ChatOpenRouter(
         model=modelo,
         temperature=temperatura,
@@ -1168,7 +1373,7 @@ def crear_llm(temperatura: float = 0.0) -> ChatOpenRouter:
 
 
 # ============================================================
-# 7. TOOL DEL AGENTE
+# 6. TOOL DEL AGENTE
 # ============================================================
 
 class GuardarClasificacionArgs(BaseModel):
@@ -1353,7 +1558,7 @@ def extraer_clasificacion_de_pasos(pasos: list) -> dict | None:
             motivo = tool_input.get("motivo", "")
 
             clasificacion = normalizar_clasificacion(
-                cb=bool(cb),
+                cb=cb,
                 cb_score=float(cb_score),
                 cb_label=str(cb_label),
             )
@@ -1403,7 +1608,6 @@ def analizar_articulo_con_agente(
     clasificacion = extraer_clasificacion_de_pasos(pasos)
 
     if clasificacion is None:
-        # Si ocurre, normalmente significa que el modelo elegido no soporta bien tool calling.
         return {
             "Periódico": articulo.get("Periódico"),
             "Archivo JSON": str(ruta_json),
@@ -1454,7 +1658,7 @@ def analizar_articulo_con_agente(
 
 
 # ============================================================
-# 8. INTERFAZ STREAMLIT
+# 7. INTERFAZ STREAMLIT
 # ============================================================
 
 def inicializar_estado_interfaz() -> None:
@@ -1730,8 +1934,6 @@ def main() -> None:
         layout="wide",
     )
 
-    aplicar_estilo_neobrutalist()
-
     DATA_DIR.mkdir(exist_ok=True)
     RAZONAMIENTOS_DIR.mkdir(exist_ok=True)
     inicializar_estado_interfaz()
@@ -1813,8 +2015,6 @@ def main() -> None:
         except Exception as exc:
             st.error(f"No se pudo ejecutar el agente: {exc}")
 
-    # Si el usuario cambia otro widget después de ejecutar, Streamlit rerenderiza.
-    # Gracias a session_state, los resultados no desaparecen.
     if not ejecucion_realizada_ahora:
         mostrar_ejecucion_guardada()
 
