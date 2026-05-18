@@ -8,12 +8,14 @@ Juan Alcaráz Otón, Xueyao An, Fabián Calvo Castillo, Adrián Carrasco Alcalá
 Este proyecto cubre los siguientes periódicos y medios:
 
 - **ABC**
-- **ElDiario**
+- **elDiario**
 - **El Confidencial**
 - **La Vanguardia**
 - **20minutos**
-- **OK Diario**
+- **OkDiario**
 - **RTVE**
+- **Mediterráneo Digital**
+- **El HuffPost**
 
 ## Categorías de Noticias
 
