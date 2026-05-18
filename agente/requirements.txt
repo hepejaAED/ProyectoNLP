@@ -7,3 +7,4 @@ langchain
 langchain-core
 langchain-classic
 langchain-openrouter
+feedparser
