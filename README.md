@@ -1,9 +1,9 @@
 # Detección de *clickbait* en noticias
-## Proyecto Procesado de Lenguaje Natural - Máster en Ciencia de Datos, Universitat de València
+# Proyecto Procesado de Lenguaje Natural - Máster en Ciencia de Datos, Universitat de València
 
 Juan Alcaraz Otón, Xueyao An, Fabián Calvo Castillo, Adrián Carrasco Alcalá, Javier Herrero Pérez, Mario Martínez Guillén y Clara Montalvá Barcenilla
 
-### Pipeline del proyecto
+## Pipeline del proyecto
 
 ![image](img/pipeline_proyecto.png)
 
