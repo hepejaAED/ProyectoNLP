@@ -4,6 +4,7 @@
 > Máster en Ciencia de Datos - Universitat de València
  
 **Autores:** Juan Alcaraz Otón, Xueyao An, Fabián Calvo Castillo, Adrián Carrasco Alcalá, Javier Herrero Pérez, Mario Martínez Guillén y Clara Montalvá Barcenilla
+
 Curso 2025/2026
  
 ---
