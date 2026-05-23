@@ -1,9 +1,13 @@
-# ProyectoNLP
+# Detección de *clickbait* en noticias
+## Proyecto Procesado de Lenguaje Natural - Máster en Ciencia de Datos, Universitat de València
 
-Juan Alcaráz Otón, Xueyao An, Fabián Calvo Castillo, Adrián Carrasco Alcalá, Javier Herrero Pérez, Clara Montalvá Barcenilla y Mario Martinez Guillen
+Juan Alcaraz Otón, Xueyao An, Fabián Calvo Castillo, Adrián Carrasco Alcalá, Javier Herrero Pérez, Mario Martínez Guillén y Clara Montalvá Barcenilla
+
+### Pipeline del proyecto
 
 
-## Medios de Comunicación
+
+## Medios de comunicación
 
 Este proyecto cubre los siguientes periódicos y medios:
 
@@ -17,7 +21,7 @@ Este proyecto cubre los siguientes periódicos y medios:
 - **Mediterráneo Digital**
 - **El HuffPost**
 
-## Categorías de Noticias
+## Categorías de noticias
 
 Los artículos se clasifican en las siguientes categorías:
 
@@ -25,8 +29,7 @@ Los artículos se clasifican en las siguientes categorías:
 - **Nacional** - Noticias de España
 - **Cultura** - Artes, cine, literatura, entretenimiento
 
-
-## Estructura de Datos
+## Estructura de datos
 
 Los artículos extraídos se almacenan en formato JSON con la siguiente estructura:
 
