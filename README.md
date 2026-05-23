@@ -5,7 +5,7 @@ Juan Alcaraz Otón, Xueyao An, Fabián Calvo Castillo, Adrián Carrasco Alcalá,
 
 ### Pipeline del proyecto
 
-
+![image](img/pipeline_proyecto.png)
 
 ## Medios de comunicación
 
