@@ -1690,5 +1690,17 @@
     "cb": false,
     "cb_score": 0.94,
     "cb_label": "NO Clickbait"
+  },
+  {
+    "Link": "https://www.20minutos.es/madrid/gimenez-barriocanal-organizador-visita-papa-quiere-hablar-con-los-que-gente-no-habla-sinhogar-presos-migrantes_6970657_0.html",
+    "Periódico": "20minutos",
+    "Fecha": "2026-05-19",
+    "Título": "Giménez Barriocanal, organizador de la visita del Papa: \"Quiere hablar con los que la gente no habla: presos, migrantes...\"",
+    "Subtítulo": "El coordinador general adjunto narra cómo es planear el primer viaje de León XIV a España y los retos de movilidad, logística, decoración y economía que supone una visita de tal magnitud en Madrid, Valencia y Sevilla.",
+    "Categoría": "Nacional",
+    "Contenido": "Fernando Giménez Barriocanal es vicesecretario para Asuntos Económicos de la Conferencia Episcopal Española y ha sido designado coordinador general adjunto de la visita del papa León XIV a España, entre el 6 y el 12 de junio . En la práctica, una de las piezas clave del cerebro español detrás de la organización del viaje. Todo arrancó con un aviso en los pasillos del Vaticano que se convirtió en una carrera contrarreloj en la que ha tenido que aplicar todo lo aprendido en la visita de Juan Pablo II en 2003 y la JMJ de 2011. A menos de un mes de que el Papa pise Madrid, Giménez detalla a 20minutos cómo ha sido diseñar una agenda que atraviesa Madrid, Barcelona y Canarias encajando grandes actos con encuentros con migrantes, presos o jóvenes. Una labor que hace voluntariamente y por la que lleva durmiendo \"una media de cuatro horas desde hace tres meses\". \"Tenemos el reto de acoger en Madrid a más de 40.000 personas que nos han pedido que les busquemos un sitio para dormir gratis\" \"Hemos apelado a la generosidad de la gente, al tiempo de los voluntarios y a aportaciones de administraciones y empresas\"",
+    "cb": false,
+    "cb_score": 0.92,
+    "cb_label": "NO Clickbait"
   }
 ]

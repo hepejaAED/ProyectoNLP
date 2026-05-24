@@ -934,5 +934,17 @@
     "cb": false,
     "cb_score": 0.94,
     "cb_label": "NO Clickbait"
+  },
+  {
+    "Link": "https://www.rtve.es/noticias/20260524/informe-udef-plus-ultra-zapatero/17083404.shtml",
+    "Periódico": "RTVE",
+    "Fecha": "2026-05-24",
+    "Título": "La UDEF sitúa a Zapatero en la \"cúspide\" de la trama: las claves de los informes que apuntan a su \"liderazgo no visible\"",
+    "Subtítulo": "Consulta los aspectos principales del informe UDEF sobre Plus Ultra, el rescate público, el papel atribuido a Zapatero y las posibles consecuencias judiciales",
+    "Categoría": "Nacional",
+    "Contenido": "Los dos informes que ha entregado la Unidad de Delincuencia Económica y Fiscal ( UDEF ) al juez de la Audiencia Nacional José Luis Calama sitúan al expresidente del Gobierno José Luis Rodríguez Zapatero en la \"cúspide\" de una red organizada de tráfico de influencias que intervino en el rescate de la aerolínea Plus Ultra en marzo de 2021 por 53 millones de euros procedentes de la SEPI. También le señala como el \"principal beneficiario\", a través de la sociedad de sus dos hijas, de las contraprestaciones que dicha red recibía a cambio de sus favores. Son dos documentos de 158 y 186 páginas que apuntan al \"liderazgo no visible\" de Zapatero en la presunta trama, por la que está imputado por primera vez un presidente del Gobierno español por presuntos delitos de organización criminal, tráfico de influencias y falsedad documental. Se basan, principalmente, en conversaciones y correos intervenidos a los directivos de la aerolínea y al entorno más cercano del expresidente del Gobierno. Estas son las principales claves de los informes: Julio Martínez Martínez (iz), Julio Martínez Sola (centro) y Roberto Roselli (a su derecha) / UDEF / RTVE.es UDEF / RTVE Los directivos de Plus Ultra exploraron dos vías para acceder a las ayudas: la del entonces ministro de Fomento, José Luis Ábalos, (imputado por el 'caso mascarillas') y la del expresidente Zapatero por ser \"pro Sánchez\" y \"pro Maduro\" , como se ve en las conversaciones. \"Delcy que llame a Ábalos. O alguien con Zapatero \", le dice el 30 de marzo de 2020 Reyes a Martínez Sola, quien responde: \"El fin justifica los medios\". Se refieren a la vicepresidenta de Venezuela, Delcy Rodríguez, quien también habría servido de intermediaria en otras ocasiones para beneficiar a la compañía. \"Necesitamos llegar a las ayudas\". Reyes le pregunta al abogado de la empresa, Miguel Palomero, qué se le ocurre a nivel político, a lo que este responde que cree que puede llegar a Ábalos. Comienza así una búsqueda de esta vía a través del \"amigo\" de Palomero , a quien los investigadores identifican como Koldo García , el que fuera asesor del exministro y que está en prisión provisional junto a éste. La trama logra acceder a la 'vía Zapatero' el 28 de abril de ese año. \"Acaba de hacerse el puente con ZP \", le dice Reyes al presidente de Plus Ultra semanas después de que contactara con Ramón Gordils, el hombre de Zapatero en Venezuela y ex alto cargo del Gobierno venezolano. En enero de 2021, el dueño de Plus Ultra le dice al presidente de la compañía: \" Mañana Zapatero interviene directamente . Va a intentar que nos den los permisos sin que tenga que intervenir la embajada de España\".",
+    "cb": false,
+    "cb_score": 0.92,
+    "cb_label": "NO Clickbait"
   }
 ]

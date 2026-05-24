@@ -453,5 +453,44 @@
     "cb_score": 0.88,
     "cb_label": "Clickbait",
     "Título sin clickbait": "Corea del Sur, con uno de los ejércitos más grandes, autoriza la operación del avión de combate KF-21 Boramae"
+  },
+  {
+    "Link": "https://okdiario.com/espana/tellado-zapatero-nunca-estuvo-lado-correcto-historia-sino-rentable-17143566",
+    "Periódico": "OkDiario",
+    "Fecha": "2026-05-24",
+    "Título": "Tellado: «Zapatero nunca estuvo en el lado correcto de la historia, sino en el rentable»",
+    "Subtítulo": "El secretario general del PP, Miguel Tellado, ha afirmado que el ex presidente del Gobierno José Luis Rodríguez Zapatero «nunca estuvo en el lado correcto de la historia, sino en el rentable», en referencia a la imputación de Zapatero en el caso del rescate de la aerolínea Plus Ultra, unos hechos que, según Tellado, ponen …",
+    "Categoría": "Nacional",
+    "Contenido": "El secretario general del PP, Miguel Tellado. El secretario general del PP, Miguel Tellado.",
+    "cb": true,
+    "cb_score": 0.78,
+    "cb_label": "Clickbait",
+    "Título sin clickbait": "Tellado afirma que Zapatero priorizó intereses económicos sobre principios en el caso Plus Ultra"
+  },
+  {
+    "Link": "https://okdiario.com/madrid/viral-reflexion-ayuso-informe-udef-espana-necesita-reiniciarse-desde-cero-17143255",
+    "Periódico": "OkDiario",
+    "Fecha": "2026-05-24",
+    "Título": "La viral reflexión de Ayuso tras el informe de la UDEF: «España necesita reiniciarse desde cero»",
+    "Subtítulo": "La presidenta de la Comunidad de Madrid, Isabel Díaz Ayuso, ha reaccionado al informe de la Unidad de Delincuencia Económica y Fiscal (UDEF) de la Policía Nacional que implica de lleno al líder socialista y mano derecha de Pedro Sánchez, José Luis Rodríguez Zapatero: «España necesita reiniciarse desde cero, desde la raíz». Ayuso ha escrito …",
+    "Categoría": "Nacional",
+    "Contenido": "Isabel Díaz Ayuso. Isabel Díaz Ayuso.",
+    "cb": true,
+    "cb_score": 0.88,
+    "cb_label": "Clickbait",
+    "Título sin clickbait": "Isabel Díaz Ayuso comenta el informe de la UDEF y afirma que España debe reiniciarse desde la raíz"
+  },
+  {
+    "Link": "https://okdiario.com/canarias/esta-isla-canarias-mas-barata-ir-vacaciones-este-verano-agencias-viajes-coinciden-17126834",
+    "Periódico": "OkDiario",
+    "Fecha": "2026-05-24",
+    "Título": "Ésta es la isla de Canarias más barata para ir de vacaciones este verano: las agencias de viajes coinciden",
+    "Subtítulo": "Como suele ocurrir todos los años, las Islas Canarias vuelven a colarse entre los destinos favoritos de quienes empiezan a organizar las vacaciones de verano. Pero dentro de las propias Canarias hay diferentes destinos y en función de lo que elijas puedes darte cuenta de como las diferencias de precios se pueden notar bastante. En …",
+    "Categoría": "Nacional",
+    "Contenido": "Camino en La Caldera de Taburiente parque nacional de La Palma. (Foto: iStock) Ésta es la isla de Canarias más barata para ir de vacaciones este verano las agencias de viajes coinciden",
+    "cb": true,
+    "cb_score": 0.75,
+    "cb_label": "Clickbait",
+    "Título sin clickbait": "Según varias agencias, La Palma es la isla de Canarias con los precios más bajos para vacaciones de verano"
   }
 ]

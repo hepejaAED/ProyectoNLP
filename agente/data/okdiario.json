@@ -1438,5 +1438,77 @@
     "cb": false,
     "cb_score": 0.94,
     "cb_label": "NO Clickbait"
+  },
+  {
+    "Link": "https://okdiario.com/espana/tellado-zapatero-nunca-estuvo-lado-correcto-historia-sino-rentable-17143566",
+    "Periódico": "OkDiario",
+    "Fecha": "2026-05-24",
+    "Título": "Tellado: «Zapatero nunca estuvo en el lado correcto de la historia, sino en el rentable»",
+    "Subtítulo": "El secretario general del PP, Miguel Tellado, ha afirmado que el ex presidente del Gobierno José Luis Rodríguez Zapatero «nunca estuvo en el lado correcto de la historia, sino en el rentable», en referencia a la imputación de Zapatero en el caso del rescate de la aerolínea Plus Ultra, unos hechos que, según Tellado, ponen …",
+    "Categoría": "Nacional",
+    "Contenido": "El secretario general del PP, Miguel Tellado. El secretario general del PP, Miguel Tellado.",
+    "cb": true,
+    "cb_score": 0.78,
+    "cb_label": "Clickbait"
+  },
+  {
+    "Link": "https://okdiario.com/espana/pnv-abre-dejar-caer-sanchez-irresponsable-que-siga-mas-alla-2026-agenda-judicializada-17143515",
+    "Periódico": "OkDiario",
+    "Fecha": "2026-05-24",
+    "Título": "El PNV se abre a dejar caer a Sánchez: «Es irresponsable que siga más allá de 2026 con una agenda judicializada»",
+    "Subtítulo": "Los indicios de presunta corrupción del PSOE están haciendo insostenible para los socios de Pedro Sánchez mantener su apoyo abiertamente, algo que se ha apreciado en la nueva posición que ha tomado el PNV este domingo tras conocerse el informe de la Unidad de Delincuencia Económica y Fiscal (UDEF) de la Policía Nacional, que acerca …",
+    "Categoría": "Nacional",
+    "Contenido": "Líder del PNV, Aitor Esteban en Durango este domingo. (EP) Líder del PNV, Aitor Esteban en Durango este domingo. (EP)",
+    "cb": false,
+    "cb_score": 0.88,
+    "cb_label": "NO Clickbait"
+  },
+  {
+    "Link": "https://okdiario.com/cataluna/extremo-sur-costa-brava-este-pueblo-consolidado-como-uno-destinos-mas-accesibles-espanoles-17143508",
+    "Periódico": "OkDiario",
+    "Fecha": "2026-05-24",
+    "Título": "En el extremo sur de la Costa Brava, este pueblo se ha consolidado como uno de los destinos más accesibles para los españoles",
+    "Subtítulo": "La Costa Brava es bella de norte a sur, y algunas poblaciones despuntan. Más allá del conocido Lloret de Mar o de Tossa, en el extremo sur de la costa, hay un pueblo que cada vez se perfila como uno de los destinos más accesibles para los españoles. Para muchos es el inicio de la …",
+    "Categoría": "Nacional",
+    "Contenido": "blanes-playa-turismo-de-blanes blanes-playa-turismo-de-blanes",
+    "cb": false,
+    "cb_score": 0.92,
+    "cb_label": "NO Clickbait"
+  },
+  {
+    "Link": "https://okdiario.com/espana/psoe-defiende-zapatero-pese-rotundidad-del-informe-udef-sale-solo-alguna-conversacion-17143324",
+    "Periódico": "OkDiario",
+    "Fecha": "2026-05-24",
+    "Título": "El PSOE defiende a Zapatero pese a la rotundidad del informe de la UDEF: «Sale sólo en alguna conversación»",
+    "Subtítulo": "Para el portavoz del PSOE en el Congreso, Patxi López, no hay motivo todavía para alarmarse con las investigaciones de la UCO y la UDEF que ponen a José Luis Rodríguez Zapatero en el centro de la trama de corrupción del caso Plus Ultra. «Zapatero aparece apenas en alguna conversación», ha defendido este domingo mientras …",
+    "Categoría": "Nacional",
+    "Contenido": "frame-patxi-lopez frame-patxi-lopez",
+    "cb": false,
+    "cb_score": 0.94,
+    "cb_label": "NO Clickbait"
+  },
+  {
+    "Link": "https://okdiario.com/madrid/viral-reflexion-ayuso-informe-udef-espana-necesita-reiniciarse-desde-cero-17143255",
+    "Periódico": "OkDiario",
+    "Fecha": "2026-05-24",
+    "Título": "La viral reflexión de Ayuso tras el informe de la UDEF: «España necesita reiniciarse desde cero»",
+    "Subtítulo": "La presidenta de la Comunidad de Madrid, Isabel Díaz Ayuso, ha reaccionado al informe de la Unidad de Delincuencia Económica y Fiscal (UDEF) de la Policía Nacional que implica de lleno al líder socialista y mano derecha de Pedro Sánchez, José Luis Rodríguez Zapatero: «España necesita reiniciarse desde cero, desde la raíz». Ayuso ha escrito …",
+    "Categoría": "Nacional",
+    "Contenido": "Isabel Díaz Ayuso. Isabel Díaz Ayuso.",
+    "cb": true,
+    "cb_score": 0.88,
+    "cb_label": "Clickbait"
+  },
+  {
+    "Link": "https://okdiario.com/canarias/esta-isla-canarias-mas-barata-ir-vacaciones-este-verano-agencias-viajes-coinciden-17126834",
+    "Periódico": "OkDiario",
+    "Fecha": "2026-05-24",
+    "Título": "Ésta es la isla de Canarias más barata para ir de vacaciones este verano: las agencias de viajes coinciden",
+    "Subtítulo": "Como suele ocurrir todos los años, las Islas Canarias vuelven a colarse entre los destinos favoritos de quienes empiezan a organizar las vacaciones de verano. Pero dentro de las propias Canarias hay diferentes destinos y en función de lo que elijas puedes darte cuenta de como las diferencias de precios se pueden notar bastante. En …",
+    "Categoría": "Nacional",
+    "Contenido": "Camino en La Caldera de Taburiente parque nacional de La Palma. (Foto: iStock) Ésta es la isla de Canarias más barata para ir de vacaciones este verano las agencias de viajes coinciden",
+    "cb": true,
+    "cb_score": 0.75,
+    "cb_label": "Clickbait"
   }
 ]
