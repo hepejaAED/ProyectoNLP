@@ -33,8 +33,7 @@ Adicionalmente, se realiza un análisis similar sobre un conjunto de vídeos de 
  
 ```
 ProyectoNLP/
-├── agente/                 # Agente de scraping de noticias
-├── agente_clickbait/       # Agente de detección de clickbait
+├── agente/                 # Agente de scraping de noticias y detección de clickbait
 ├── data/                   # Datos en bruto extraídos
 ├── data_processed/         # Datos procesados y etiquetados
 ├── data_youtube_raw/       # Datos en bruto extraídos de YouTube
